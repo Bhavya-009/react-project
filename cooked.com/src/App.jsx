@@ -1,12 +1,39 @@
-import {React,  useState, useEffect } from 'react'
-import './App.css'
+import { useState } from 'react';
+import Landing from './components/Landing';
+import AppView from './components/AppView';
 
-function App() {
-return(
-    <>
-    <div>Hi</div>
-    </>
-)
+export default function App() {
+  const [phase, setPhase] = useState('landing');
+  const [activeTab, setActiveTab] = useState('make');
+  const [expanding, setExpanding] = useState(null);
+
+  const handleSelect = (tab) => {
+    setExpanding(tab);
+    setActiveTab(tab);
+    setPhase('expanding');
+    setTimeout(() => setPhase('app'), 680);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const handleBackToLanding = () => {
+    setPhase('landing');
+    setActiveTab('make');
+  };
+
+  return (
+    <div className="root-container">
+      <div className={`landing-wrapper ${phase !== 'landing' ? 'landing-wrapper--exit' : ''}`}>
+        <Landing onSelect={handleSelect} />
+        {phase === 'expanding' && expanding && (
+          <div className={`expand-flash expand-flash--${expanding}`} />
+        )}
+      </div>
+      <div className={`app-wrapper ${phase === 'app' ? 'app-wrapper--visible' : ''}`}>
+        <AppView activeTab={activeTab} onTabChange={handleTabChange} onBackToLanding={handleBackToLanding} />
+      </div>
+    </div>
+  );
 }
-
-export default App
