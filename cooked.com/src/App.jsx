@@ -5,6 +5,7 @@ import AppView from './components/AppView';
 export default function App() {
   const [phase, setPhase] = useState('landing');
   const [activeTab, setActiveTab] = useState('make');
+  const [showApp, setShowApp] = useState(false);
   const [expanding, setExpanding] = useState(null);
 
   const handleSelect = (tab) => {
@@ -25,6 +26,20 @@ export default function App() {
 
   return (
     <div className="root-container">
+       {!showApp ? (
+        <Landing
+          onSelect={(tab) => {
+            setActiveTab(tab);
+            setShowApp(true);
+          }}
+        />
+      ) : (
+        <AppView
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onBackToLanding={() => setShowApp(false)}
+        />
+      )}
       <div className={`landing-wrapper ${phase !== 'landing' ? 'landing-wrapper--exit' : ''}`}>
         <Landing onSelect={handleSelect} />
         {phase === 'expanding' && expanding && (
