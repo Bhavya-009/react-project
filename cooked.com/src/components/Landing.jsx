@@ -61,15 +61,15 @@ export default function Landing({ onSelect }) {
 
         {/* PREPARE */}
         <button
-          onMouseEnter={() => setHovered('prepare')}
+          onMouseEnter={() => setHovered('plan')}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => onSelect('prepare')}
+          onClick={() => onSelect('plan')}
           className="relative w-full md:w-1/2 h-72 rounded-2xl overflow-hidden group transition-transform duration-300 hover:scale-[1.02]"
         >
           <img
             src="https://images.pexels.com/photos/2284166/pexels-photo-2284166.jpeg?auto=compress&cs=tinysrgb&w=900"
             className={`absolute inset-0 w-full h-full object-cover transition duration-500 ${
-              hovered === 'prepare' ? 'scale-110' : ''
+              hovered === 'plan' ? 'scale-110' : ''
             }`}
           />
 

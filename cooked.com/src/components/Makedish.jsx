@@ -31,7 +31,7 @@ export default function MakeDish() {
 
   // remove tag when clicked on x button
   const removeTag = (tag) => {
-    setTags((p) => p.filter((t) => t !== tag));
+    setTags((prev) => prev.filter((t) => t !== tag));
   };
 
   // handle key down event
@@ -45,7 +45,7 @@ export default function MakeDish() {
     }
 
     if (e.key === 'Backspace' && !input && tags.length) {
-      setTags((p) => p.slice(0, -1));
+      setTags((prev) => prev.slice(0, -1));
     }
   };
 

@@ -1,5 +1,5 @@
-import MakeDish from './MakeDish';
-import PrepareDish from './PrepareDish';
+import MakeDish from './Makedish';
+import PlanDish from './PlanDish';
 
 export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
   return (
@@ -15,7 +15,7 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
         >
           <div className="w-3 h-3 bg-orange-500 rounded-full" />
           <span className="text-sm text-zinc-400 tracking-wider">
-            mise en place
+            ..
           </span>
         </button>
 
@@ -34,9 +34,9 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
           </button>
 
           <button
-            onClick={() => onTabChange('prepare')}
+            onClick={() => onTabChange('plan')}
             className={`px-4 py-2 text-sm rounded-md transition ${
-              activeTab === 'prepare'
+              activeTab === 'plan'
                 ? 'bg-orange-500 text-white'
                 : 'text-zinc-400 hover:text-white'
             }`}
@@ -56,9 +56,9 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
           </div>
         )}
 
-        {activeTab === 'prepare' && (
+        {activeTab === 'plan' && (
           <div className="animate-fadeIn">
-            <PrepareDish />
+            <PlanDish />
           </div>
         )}
 
