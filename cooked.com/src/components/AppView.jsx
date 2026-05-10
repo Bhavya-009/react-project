@@ -15,7 +15,7 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
         >
           <div className="w-3 h-3 bg-orange-500 rounded-full" />
           <span className="text-sm text-zinc-400 tracking-wider">
-            ..
+            cooked.com
           </span>
         </button>
 
@@ -63,6 +63,13 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
         )}
 
       </main>
+
+      {/* Footer */}
+      <footer className="w-full py-6 text-center border-t border-zinc-800/50 mt-auto">
+        <p className="text-zinc-500 text-sm">
+          Powered by your pantry.
+        </p>
+      </footer>
     </div>
   );
 }

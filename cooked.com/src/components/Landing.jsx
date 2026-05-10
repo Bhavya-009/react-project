@@ -9,7 +9,7 @@ export default function Landing({ onSelect }) {
       {/* Logo */}
       <div className="absolute top-6 left-6 flex items-center gap-2">
         <div className="w-3 h-3 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50" />
-        <span className="text-sm text-zinc-400 tracking-wider">cooked</span>
+        <span className="text-sm text-zinc-400 tracking-wider">cooked.com</span>
       </div>
 
       {/* Heading */}
