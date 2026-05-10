@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import { findRecipes } from '../data/recipes';
 
 const CATEGORY_COLORS = {
   Easy: '#16a34a',
@@ -8,6 +7,9 @@ const CATEGORY_COLORS = {
 };
 
 export default function MakeDish() {
+
+  const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY;
+
   const [input, setInput] = useState(''); // user input in text field
   const [results, setResults] = useState(null); // will be store with recipes
   const [loading, setLoading] = useState(false); // loading state - animation
@@ -44,50 +46,73 @@ export default function MakeDish() {
     }
   };
 
-  // main search function
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!tags.length && !input.trim()) return; //if no ingredients -> no searching
 
-    const allIngredients = [
+    const allIngredientsList = [
       ...tags,
       ...(input.trim() ? [input.trim()] : []),
-    ].join(', '); // combine all ingredients into single string
+    ];
+    const allIngredients = allIngredientsList.join(','); // Spoonacular expects comma separated
 
     setLoading(true);
     setResults(null); // clear previous results
 
-    setTimeout(() => {
-      let found = findRecipes(allIngredients);
-
-      if (diet !== 'all') {
-        found = found.filter((r) => r.dietType === diet);
+    try {
+      // Base URL for Spoonacular complexSearch
+      let url = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${allIngredients}&addRecipeNutrition=true&addRecipeInformation=true&fillIngredients=true&number=12&apiKey=${API_KEY}`;
+      
+      // Apply Diet filter
+      if (diet === 'veg') {
+        url += `&diet=vegetarian`;
+      }
+      
+      // Apply Sort
+      if (sortBy === 'time') {
+        url += `&sort=time&sortDirection=asc`;
+      } else if (sortBy === 'calories') {
+        url += `&sort=calories&sortDirection=asc`;
       }
 
-      found.sort((a, b) => {
-        if (sortBy === 'time') {
-          return a.timeMinutes - b.timeMinutes; // lesser cooking time to appear first
-        }
-
-        if (sortBy === 'calories') {
-          return a.caloriesNum - b.caloriesNum; // lesser calorie to appear first
-        }
-
-        // percentage of matched ingredients
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      if (data.results) {
+        // Map Spoonacular data to our UI format
+        let mappedResults = data.results.map(recipe => {
+          return {
+            id: recipe.id,
+            title: recipe.title,
+            image: recipe.image,
+            timeMinutes: recipe.readyInMinutes || 0,
+            caloriesNum: Math.round(recipe.nutrition?.nutrients?.find(n => n.name === 'Calories')?.amount || 0),
+            difficulty: recipe.readyInMinutes > 60 ? 'Hard' : recipe.readyInMinutes > 30 ? 'Medium' : 'Easy',
+            matchedIngredients: recipe.usedIngredients?.map(i => i.name) || [],
+            extraIngredients: recipe.missedIngredients?.map(i => i.name) || [],
+          };
+        });
+        
+        // Sort by match percentage if selected
         if (sortBy === 'match') {
-          const aMatch =
-            (a.matchedIngredients.length /
-              (a.matchedIngredients.length + a.extraIngredients.length)) * 100;
-          const bMatch =
-            (b.matchedIngredients.length /
-              (b.matchedIngredients.length + b.extraIngredients.length)) * 100;
-          return bMatch - aMatch;
+            mappedResults.sort((a, b) => {
+                const aTotal = a.matchedIngredients.length + a.extraIngredients.length;
+                const bTotal = b.matchedIngredients.length + b.extraIngredients.length;
+                const aMatch = aTotal === 0 ? 0 : (a.matchedIngredients.length / aTotal) * 100;
+                const bMatch = bTotal === 0 ? 0 : (b.matchedIngredients.length / bTotal) * 100;
+                return bMatch - aMatch;
+            });
         }
-        return 0;
-      });
 
-      setResults(found.length ? found : []);
+        setResults(mappedResults);
+      } else {
+        setResults([]);
+      }
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      setResults([]);
+    } finally {
       setLoading(false);
-    }, 1400);
+    }
   };
 
   return (
@@ -154,7 +179,7 @@ export default function MakeDish() {
             <option value="non-veg">Non-Vegetarian</option>
           </select>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <label className="text-zinc-400 font-medium">Sort by:</label>
           <select
@@ -170,11 +195,10 @@ export default function MakeDish() {
       </div>
 
       <button
-        className={`mt-6 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition ${
-          tags.length || input.trim()
-            ? 'bg-orange-500 text-white hover:bg-orange-600'
-            : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-        }`}
+        className={`mt-6 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition ${tags.length || input.trim()
+          ? 'bg-orange-500 text-white hover:bg-orange-600'
+          : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
+          }`}
         onClick={handleSearch}
         disabled={loading || (!tags.length && !input.trim())}
       >
@@ -218,11 +242,11 @@ export default function MakeDish() {
                   <h3 className="text-xl font-semibold">{recipe.title}</h3>
                   <div className="flex gap-4 text-xs text-zinc-400 mt-3">
                     <span className="flex items-center gap-1">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                       {recipe.timeMinutes} mins
                     </span>
                     <span className="flex items-center gap-1">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                       {recipe.caloriesNum} cal
                     </span>
                   </div>

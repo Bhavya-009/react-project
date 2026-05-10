@@ -4,12 +4,14 @@ export default function Landing({ onSelect }) {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white flex flex-col items-center justify-center px-6 py-10 relative">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black text-white flex flex-col items-center justify-center px-6 py-10 relative">
 
       {/* Logo */}
       <div className="absolute top-6 left-6 flex items-center gap-2">
-        <div className="w-3 h-3 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50" />
-        <span className="text-sm text-zinc-400 tracking-wider">cooked.com</span>
+        <div className="w-4 h-4 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50" />
+        <span className="text-2xl font-serif font-bold text-white tracking-tight">
+          cooked<span className="text-orange-500">.com</span>
+        </span>
       </div>
 
       {/* Heading */}
@@ -59,7 +61,7 @@ export default function Landing({ onSelect }) {
         {/* OR */}
         <div className="text-zinc-500 text-sm font-semibold">OR</div>
 
-        {/* PREPARE */}
+        {/* PLAN */}
         <button
           onMouseEnter={() => setHovered('plan')}
           onMouseLeave={() => setHovered(null)}
@@ -77,7 +79,7 @@ export default function Landing({ onSelect }) {
 
           <div className="relative z-10 h-full flex flex-col justify-between p-6">
             <div>
-              <h2 className="text-2xl font-semibold">Prepare for a Dish</h2>
+              <h2 className="text-2xl font-semibold">Plan a Dish</h2>
               <p className="text-sm text-zinc-300 mt-1">
                 Plan ingredients before cooking.
               </p>

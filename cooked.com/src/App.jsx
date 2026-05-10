@@ -16,7 +16,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-black">
+    <div className="w-full min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black">
        {!showApp ? (
         <Landing
           onSelect={(tab) => {

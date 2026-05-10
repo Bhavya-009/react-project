@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { findDish } from '../data/dishes';
+
+function mapAisleToCategory(aisle) {
+  if (!aisle) return 'Other';
+  const a = aisle.toLowerCase();
+  if (a.includes('produce') || a.includes('fruit') || a.includes('vegetable')) return 'Produce';
+  if (a.includes('meat') || a.includes('seafood') || a.includes('protein')) return 'Protein';
+  if (a.includes('dairy') || a.includes('milk') || a.includes('cheese') || a.includes('egg')) return 'Dairy';
+  if (a.includes('pantry') || a.includes('pasta') || a.includes('baking') || a.includes('canned') || a.includes('nut')) return 'Pantry';
+  if (a.includes('spice') || a.includes('seasoning') || a.includes('condiment') || a.includes('oil')) return 'Spices';
+  return 'Other';
+}
 
 const CATEGORY_ORDER = [
   'Produce',
@@ -64,17 +74,55 @@ export default function PlanDish() {
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(new Set());
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!input.trim()) return;
 
     setLoading(true);
     setResult(null);
     setChecked(new Set());
 
-    setTimeout(() => {
-      setResult(findDish(input));
+    try {
+      const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY;
+      const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(input)}&addRecipeInformation=true&fillIngredients=true&number=1&apiKey=${API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      if (data.results && data.results.length > 0) {
+        const recipe = data.results[0];
+        
+        // Clean HTML tags from summary for description
+        const cleanDescription = recipe.summary 
+          ? recipe.summary.replace(/<[^>]*>?/gm, '').split('. ').slice(0, 2).join('. ') + '.' 
+          : 'A delicious dish to prepare at home.';
+        
+        // Fallback: If extendedIngredients isn't present, use missedIngredients
+        const allIngs = recipe.extendedIngredients || recipe.missedIngredients || [];
+        
+        const mappedItems = allIngs.map(ing => ({
+          name: ing.name,
+          amount: `${Math.round(ing.amount * 10) / 10} ${ing.unit || ''}`.trim(),
+          category: mapAisleToCategory(ing.aisle)
+        }));
+
+        // Deduplicate items by name
+        const uniqueItems = Array.from(new Map(mappedItems.map(item => [item.name, item])).values());
+
+        setResult({
+          dish: recipe.title,
+          description: cleanDescription,
+          time: `${recipe.readyInMinutes || 30} mins`,
+          servings: recipe.servings || 4,
+          image: recipe.image,
+          items: uniqueItems
+        });
+      } else {
+        setResult(null); // No results found
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
       setLoading(false);
-    }, 1400);
+    }
   };
 
   const toggleCheck = (name) => {

@@ -3,7 +3,7 @@ import PlanDish from './PlanDish';
 
 export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black text-white flex flex-col">
 
       {/* Navbar */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
@@ -13,9 +13,9 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
           onClick={onBackToLanding}
           className="flex items-center gap-2 hover:opacity-80 transition"
         >
-          <div className="w-3 h-3 bg-orange-500 rounded-full" />
-          <span className="text-sm text-zinc-400 tracking-wider">
-            cooked.com
+          <div className="w-4 h-4 bg-orange-500 rounded-full shadow-md shadow-orange-500/30" />
+          <span className="text-xl font-serif font-bold text-white tracking-tight">
+            cooked<span className="text-orange-500">.com</span>
           </span>
         </button>
 
@@ -41,7 +41,7 @@ export default function AppView({ activeTab, onTabChange, onBackToLanding }) {
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            Prepare
+            Plan
           </button>
 
         </div>
