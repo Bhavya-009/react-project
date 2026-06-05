@@ -1,10 +1,5 @@
 import { useState, useRef } from 'react';
 
-const CATEGORY_COLORS = {
-  Easy: '#16a34a',
-  Medium: '#d97706',
-  Hard: '#dc2626',
-};
 
 export default function MakeDish() {
 
@@ -236,9 +231,6 @@ export default function MakeDish() {
               <div key={idx} className="bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-700 hover:border-zinc-500 transition group">
                 <div className="relative h-48">
                   <img src={recipe.image || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600'} alt={recipe.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-black/70 backdrop-blur-sm rounded-full text-xs font-medium" style={{ color: CATEGORY_COLORS[recipe.difficulty] || CATEGORY_COLORS.Medium }}>
-                    {recipe.difficulty}
-                  </div>
                 </div>
                 <div className="p-5">
                   <h3 className="text-xl font-semibold">{recipe.title}</h3>
