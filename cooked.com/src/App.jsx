@@ -1,36 +1,77 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Landing from './components/Landing';
-import AppView from './components/AppView';
+import MakeDish from './components/Makedish';
+import PlanDish from './components/PlanDish';
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState('make');
-  const [showApp, setShowApp] = useState(false);
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const handleBackToLanding = () => {
-    setShowApp(false);
-    setActiveTab('make');
-  };
+function MainLayout({ children }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activeTab = location.pathname.includes('/plan') ? 'plan' : 'make';
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black">
-       {!showApp ? (
-        <Landing
-          onSelect={(tab) => {
-            setActiveTab(tab);
-            setShowApp(true);
-          }}
-        />
-      ) : (
-        <AppView
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          onBackToLanding={handleBackToLanding}
-        />
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black text-white flex flex-col">
+      {/* Navbar */}
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 hover:opacity-80 transition"
+        >
+          <div className="w-4 h-4 bg-orange-500 rounded-full shadow-md shadow-orange-500/30" />
+          <span className="text-xl font-serif font-bold text-white tracking-tight">
+            cooked<span className="text-orange-500">.com</span>
+          </span>
+        </button>
+
+        {/* Tabs */}
+        <div className="flex bg-zinc-800 p-1 rounded-lg">
+          <button
+            onClick={() => navigate('/make')}
+            className={`px-4 py-2 text-sm rounded-md transition ${
+              activeTab === 'make'
+                ? 'bg-orange-500 text-white'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            Make
+          </button>
+          <button
+            onClick={() => navigate('/plan')}
+            className={`px-4 py-2 text-sm rounded-md transition ${
+              activeTab === 'plan'
+                ? 'bg-orange-500 text-white'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            Plan
+          </button>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <main className="flex-1 w-full max-w-5xl mx-auto p-6">
+        <div className="animate-fadeIn">
+          {children}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full py-6 text-center border-t border-zinc-800/50 mt-auto">
+        <p className="text-zinc-500 text-sm">
+          Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">githublink</a>
+        </p>
+      </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/make" element={<MainLayout><MakeDish /></MainLayout>} />
+        <Route path="/plan" element={<MainLayout><PlanDish /></MainLayout>} />
+      </Routes>
+    </Router>
   );
 }

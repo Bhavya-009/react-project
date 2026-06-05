@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Landing({ onSelect }) {
+export default function Landing() {
   const [hovered, setHovered] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-green-950 to-black text-white flex flex-col items-center justify-center px-6 py-10 relative">
@@ -32,7 +34,7 @@ export default function Landing({ onSelect }) {
         <button
           onMouseEnter={() => setHovered('make')}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => onSelect('make')}
+          onClick={() => navigate('/make')}
           className="relative w-full md:w-1/2 h-72 rounded-2xl overflow-hidden group transition-transform duration-300 hover:scale-[1.02]"
         >
           <img
@@ -65,7 +67,7 @@ export default function Landing({ onSelect }) {
         <button
           onMouseEnter={() => setHovered('plan')}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => onSelect('plan')}
+          onClick={() => navigate('/plan')}
           className="relative w-full md:w-1/2 h-72 rounded-2xl overflow-hidden group transition-transform duration-300 hover:scale-[1.02]"
         >
           <img
@@ -95,7 +97,7 @@ export default function Landing({ onSelect }) {
 
       {/* Footer */}
       <p className="text-zinc-500 text-sm mt-10">
-        Powered by your pantry.
+        Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">githublink</a>
       </p>
     </div>
   );

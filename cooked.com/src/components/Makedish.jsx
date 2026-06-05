@@ -19,6 +19,7 @@ export default function MakeDish() {
 
   const inputRef = useRef(null);
 
+  // Convert input text -- into -- individual ingredient tags
   const addTag = (val) => {
     const trimmed = val.replace(/,/g, '').trim();
     if (trimmed && !tags.includes(trimmed)) {
@@ -27,7 +28,7 @@ export default function MakeDish() {
     setInput('');
   };
 
-  // remove tag when clicked on x button
+  // remove tag when clicked on 'x' button OR backspace
   const removeTag = (tag) => {
     setTags((prev) => prev.filter((t) => t !== tag));
   };
@@ -104,6 +105,7 @@ export default function MakeDish() {
         }
 
         setResults(mappedResults);
+        console.log(data);
       } else {
         setResults([]);
       }
