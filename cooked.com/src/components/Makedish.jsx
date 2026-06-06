@@ -57,12 +57,12 @@ export default function MakeDish() {
     try {
       // Base URL for Spoonacular complexSearch
       let url = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${allIngredients}&addRecipeNutrition=true&addRecipeInformation=true&fillIngredients=true&number=12&apiKey=${API_KEY}`;
-      
+
       // Apply Diet filter
       if (diet === 'veg') {
         url += `&diet=vegetarian`;
       }
-      
+
       // Apply Sort
       if (sortBy === 'time') {
         url += `&sort=time&sortDirection=asc`;
@@ -72,7 +72,7 @@ export default function MakeDish() {
 
       const res = await fetch(url);
       const data = await res.json();
-      
+
       if (data.results) {
         // Map Spoonacular data to our UI format
         let mappedResults = data.results.map(recipe => {
@@ -87,16 +87,16 @@ export default function MakeDish() {
             extraIngredients: recipe.missedIngredients?.map(i => i.name) || [],
           };
         });
-        
+
         // Sort by match percentage if selected
         if (sortBy === 'match') {
-            mappedResults.sort((a, b) => {
-                const aTotal = a.matchedIngredients.length + a.extraIngredients.length;
-                const bTotal = b.matchedIngredients.length + b.extraIngredients.length;
-                const aMatch = aTotal === 0 ? 0 : (a.matchedIngredients.length / aTotal) * 100;
-                const bMatch = bTotal === 0 ? 0 : (b.matchedIngredients.length / bTotal) * 100;
-                return bMatch - aMatch;
-            });
+          mappedResults.sort((a, b) => {
+            const aTotal = a.matchedIngredients.length + a.extraIngredients.length;
+            const bTotal = b.matchedIngredients.length + b.extraIngredients.length;
+            const aMatch = aTotal === 0 ? 0 : (a.matchedIngredients.length / aTotal) * 100;
+            const bMatch = bTotal === 0 ? 0 : (b.matchedIngredients.length / bTotal) * 100;
+            return bMatch - aMatch;
+          });
         }
 
         setResults(mappedResults);
@@ -206,8 +206,8 @@ export default function MakeDish() {
           </span>
         ) : (
           <>
-          <Search size={20}/>
-          Find Recipes
+            <Search size={20} />
+            Find Recipes
           </>
         )}
       </button>
@@ -228,7 +228,7 @@ export default function MakeDish() {
                       {recipe.timeMinutes} mins
                     </span>
                     <span className="flex items-center gap-1">
-                      <DollarSign size={14}/>
+                      <DollarSign size={14} />
                       {recipe.caloriesNum} cal
                     </span>
                   </div>
