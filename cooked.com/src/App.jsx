@@ -72,11 +72,10 @@ function MainLayout({ children }) {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-6 text-center border-t border-zinc-800/50 mt-auto">
-        <p className="text-zinc-500 text-sm">
-          Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">githublink</a>
-        </p>
-      </footer>
+      <p className={`text-zinc-500 text-sm text-center mt-10 transition-all duration-500`}>
+        Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">GitHub </a>
+        | <a href="https://www.linkedin.com/in/bhavya-lakhani-profile/" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </p>
     </div>
   );
 }

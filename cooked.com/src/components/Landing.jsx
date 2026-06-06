@@ -74,7 +74,7 @@ export default function Landing() {
         >
           <img
             src={makePic}
-            className={`absolute inset-0 w-full h-full object-cover opacity-90 transition duration-500 ${
+            className={`absolute inset-0 w-full h-full object-cover transition duration-500 ${
               hovered === 'make' ? 'scale-110' : ''
             }`}
           />
@@ -122,7 +122,7 @@ export default function Landing() {
         >
           <img
             src={planPic}
-            className={`absolute inset-0 w-full h-full object-cover opacity-90 transition duration-500 ${
+            className={`absolute inset-0 w-full h-full object-cover transition duration-500 ${
               hovered === 'plan' ? 'scale-110' : ''
             }`}
           />
@@ -156,7 +156,7 @@ export default function Landing() {
 
       {/* Footer */}
       <p className={`text-zinc-500 text-sm mt-10 transition-all duration-500 ${transitioning ? 'door-header-fade' : ''}`}>
-        Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">GitHub</a>
+        Built by Bhavya Lakhani | <a href="https://github.com/Bhavya-009/react-project" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">GitHub </a>
         | <a href="https://www.linkedin.com/in/bhavya-lakhani-profile/" className="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </p>
     </div>
